@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Diary</title>
+<link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+<div id="auth" class="auth-box">
+  <h3>Welcome to AI Diary</h3>
+  <form id="authForm">
+    <input id="email" type="email" placeholder="Email" required autocomplete="email" />
+    <input id="password" type="password" placeholder="Password" required autocomplete="current-password" />
+    <button type="submit" id="authSubmitBtn">Sign In</button>
+  </form>
+
+  <div style="margin-top:10px;">
+    <button id="btnSwitchToSignUp" class="btn">Switch to Sign Up</button>
+    <button id="btnSwitchToSignIn" class="btn" style="display:none;">Switch to Sign In</button>
+  </div>
+
+  <button id="btnGoogle" class="btn" style="margin-top:15px;">Sign In with Google</button>
+</div>
+
+<div class="container" style="display:none;">
+  <h2>AI Diary Entry</h2>
+
+  <label for="inputText" class="label">What happened today?</label>
+  <textarea id="inputText" placeholder="Type your daily summary here..."></textarea>
+  <button id="generateBtn" class="btn">Generate Diary Entry</button>
+
+  <h3>AI Generated Entry</h3>
+  <div id="generatedEntry" class="entry-box" contenteditable="true"></div>
+  <button id="saveBtn" class="btn save-btn">Save Entry</button>
+  <button id="deleteBtn" class="btn delete-btn" style="background-color:#d9534f; color:white;">Delete Entry</button>
+
+  <hr />
+
+  <h3>Load Entry</h3>
+  <input type="date" id="datePicker" class="date-picker" />
+  <button id="loadBtn" class="btn">Load</button>
+  <div id="loadedEntry" class="entry-box loaded-entry"></div>
+  <button id="btnSignOut" class="btn" style="margin-top:15px; display:none;">Log Out</button>
+</div>
+
+<p id="statusMessage" style="text-align:center; margin-top:20px; font-weight:bold;"></p>
+
+<script type="module" src="index.js"></script>
+</body>
+</html>
