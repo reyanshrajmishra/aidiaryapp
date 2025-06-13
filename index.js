@@ -121,20 +121,22 @@ async function generateDiaryEntry(text) {
   const todayDate = new Date().toLocaleDateString('en-CA');
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch('/.netlify/functions/diary', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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'
-      },
-      body: JSON.stringify({
-        model: "mistralai/mixtral-8x7b-instruct",
-        messages: [{
-          role: "user",
-          content: `Hey My Name Is Reyansh Raj Mishra and you are integrated in my app for helping me write diary entries. The date is ${todayDate}. Today I: ${text}`
-        }]
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, date: todayDate })
     });
+
+    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
+    const { entry } = await response.json();
+    return entry;
+  } catch (error) {
+    console.error('Failed to generate entry:', error);
+    return 'Error generating entry. Please try again.';
+  }
+}
+
 
     if (!response.ok) throw new Error(`API Error: ${response.status}`);
     const data = await response.json();
