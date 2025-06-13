@@ -10,7 +10,6 @@ const supabase = createClient(
 const authBox = document.getElementById('auth');
 const container = document.querySelector('.container');
 const statusMessage = document.getElementById('statusMessage');
-
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const authForm = document.getElementById('authForm');
@@ -19,7 +18,6 @@ const btnSwitchToSignUp = document.getElementById('btnSwitchToSignUp');
 const btnSwitchToSignIn = document.getElementById('btnSwitchToSignIn');
 const btnGoogle = document.getElementById('btnGoogle');
 const btnSignOut = document.getElementById('btnSignOut');
-
 const generateBtn = document.getElementById('generateBtn');
 const saveBtn = document.getElementById('saveBtn');
 const deleteBtn = document.getElementById('deleteBtn');
@@ -52,13 +50,13 @@ function updateAuthStatus(email) {
   console.log('Auth Status Updated. Email:', email);
 }
 
-// Switch UI modes
 function switchToSignUp() {
   authMode = 'signup';
   authSubmitBtn.textContent = 'Sign Up';
   btnSwitchToSignUp.style.display = 'none';
   btnSwitchToSignIn.style.display = 'inline-block';
 }
+
 function switchToSignIn() {
   authMode = 'signin';
   authSubmitBtn.textContent = 'Sign In';
@@ -66,7 +64,6 @@ function switchToSignIn() {
   btnSwitchToSignIn.style.display = 'none';
 }
 
-// Handle auth form submit
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = emailInput.value.trim();
@@ -89,24 +86,20 @@ authForm.addEventListener('submit', async (e) => {
   }
 });
 
-// Google OAuth
 btnGoogle.onclick = async () => {
   const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
   if (error) return showMessage(error.message, true);
 };
 
-// Sign out
 btnSignOut.onclick = async () => {
   await supabase.auth.signOut();
   updateAuthStatus(null);
   showMessage('Logged out successfully.');
 };
 
-// Switch auth mode
 btnSwitchToSignUp.onclick = switchToSignUp;
 btnSwitchToSignIn.onclick = switchToSignIn;
 
-// Check session on load
 window.onload = async () => {
   const { data: { session } } = await supabase.auth.getSession();
   if (session?.user) {
@@ -116,7 +109,6 @@ window.onload = async () => {
   }
 };
 
-// Generate diary entry
 async function generateDiaryEntry(text) {
   const todayDate = new Date().toLocaleDateString('en-CA');
 
@@ -129,19 +121,8 @@ async function generateDiaryEntry(text) {
 
     if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
-    const { entry } = await response.json();
-    return entry;
-  } catch (error) {
-    console.error('Failed to generate entry:', error);
-    return 'Error generating entry. Please try again.';
-  }
-}
-
-
-    if (!response.ok) throw new Error(`API Error: ${response.status}`);
     const data = await response.json();
-    return data.choices[0].message.content;
-
+    return data.entry;
   } catch (error) {
     console.error('Failed to generate entry:', error);
     return 'Error generating entry. Please try again.';
@@ -156,7 +137,6 @@ generateBtn.onclick = async () => {
   generatedEntry.textContent = entry;
 };
 
-// Save diary entry
 saveBtn.onclick = async () => {
   const entry = generatedEntry.textContent.trim();
   if (!entry || entry === 'Generating...' || entry.startsWith('Error')) {
@@ -178,7 +158,6 @@ saveBtn.onclick = async () => {
   }
 };
 
-// Delete entry
 deleteBtn.onclick = async () => {
   const dateKey = datePicker.value;
   if (!dateKey) return showMessage('Please select a date to delete.', true);
@@ -187,12 +166,7 @@ deleteBtn.onclick = async () => {
 
   const { data: { user } } = await supabase.auth.getUser();
   if (user) {
-    const { error } = await supabase
-      .from('entries')
-      .delete()
-      .eq('user_id', user.id)
-      .eq('date', dateKey);
-
+    const { error } = await supabase.from('entries').delete().eq('user_id', user.id).eq('date', dateKey);
     if (error) return showMessage('Failed to delete entry from cloud: ' + error.message, true);
   }
 
@@ -201,20 +175,13 @@ deleteBtn.onclick = async () => {
   showMessage(`Entry for ${dateKey} deleted.`);
 };
 
-// Load diary entry
 loadBtn.onclick = async () => {
   const dateKey = datePicker.value;
   if (!dateKey) return showMessage('Please select a date.', true);
 
   const { data: { user } } = await supabase.auth.getUser();
   if (user) {
-    const { data, error } = await supabase
-      .from('entries')
-      .select('entry')
-      .eq('user_id', user.id)
-      .eq('date', dateKey)
-      .single();
-
+    const { data, error } = await supabase.from('entries').select('entry').eq('user_id', user.id).eq('date', dateKey).single();
     loadedEntry.textContent = data?.entry || 'No entry found for this date.';
   } else {
     loadedEntry.textContent = localStorage.getItem(`diary_${dateKey}`) || 'No entry found for this date.';
