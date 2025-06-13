@@ -6,53 +6,57 @@
   <title>AI Diary</title>
   <link rel="stylesheet" href="index.css" />
 
-  <!-- ✅ Google AdSense Script -->
+  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3627684978883577"
     crossorigin="anonymous"></script>
 </head>
 <body>
 
-<div id="auth" class="auth-box">
-  <h3>Welcome to AI Diary</h3>
-  <form id="authForm">
-    <input id="email" type="email" placeholder="Email" required autocomplete="email" />
-    <input id="password" type="password" placeholder="Password" required autocomplete="current-password" />
-    <button type="submit" id="authSubmitBtn">Sign In</button>
-  </form>
+  <!-- Auth Box -->
+  <div id="auth" class="auth-box">
+    <h3>Welcome to AI Diary</h3>
+    <form id="authForm">
+      <input id="email" class="input" type="email" placeholder="Email" required autocomplete="email" />
+      <input id="password" class="input" type="password" placeholder="Password" required autocomplete="current-password" />
+      <button type="submit" id="authSubmitBtn" class="btn">Sign In</button>
+    </form>
 
-  <div style="margin-top:10px;">
-    <button id="btnSwitchToSignUp" class="btn">Switch to Sign Up</button>
-    <button id="btnSwitchToSignIn" class="btn" style="display:none;">Switch to Sign In</button>
+    <div class="auth-toggle">
+      <button id="btnSwitchToSignUp" class="btn">Switch to Sign Up</button>
+      <button id="btnSwitchToSignIn" class="btn" style="display:none;">Switch to Sign In</button>
+    </div>
+
+    <button id="btnGoogle" class="btn" style="margin-top:15px;">Sign In with Google</button>
   </div>
 
-  <button id="btnGoogle" class="btn" style="margin-top:15px;">Sign In with Google</button>
-</div>
+  <!-- Main App Container -->
+  <div class="container" style="display:none;">
+    <h2>AI Diary Entry</h2>
 
-<div class="container" style="display:none;">
-  <h2>AI Diary Entry</h2>
+    <label for="inputText" class="label">What happened today?</label>
+    <textarea id="inputText" class="input" placeholder="Type your daily summary here..."></textarea>
+    <button id="generateBtn" class="btn">Generate Diary Entry</button>
 
-  <label for="inputText" class="label">What happened today?</label>
-  <textarea id="inputText" placeholder="Type your daily summary here..."></textarea>
-  <button id="generateBtn" class="btn">Generate Diary Entry</button>
+    <h3>AI Generated Entry</h3>
+    <div id="generatedEntry" class="entry-box" contenteditable="true"></div>
+    <button id="saveBtn" class="btn save-btn">Save Entry</button>
+    <button id="deleteBtn" class="btn" style="background-color:#d9534f; color:white;">Delete Entry</button>
 
-  <h3>AI Generated Entry</h3>
-  <div id="generatedEntry" class="entry-box" contenteditable="true"></div>
-  <button id="saveBtn" class="btn save-btn">Save Entry</button>
-  <button id="deleteBtn" class="btn delete-btn" style="background-color:#d9534f; color:white;">Delete Entry</button>
+    <hr />
 
-  <hr />
+    <h3>Load Entry</h3>
+    <input type="date" id="datePicker" class="date-picker" />
+    <button id="loadBtn" class="btn">Load</button>
+    <div id="loadedEntry" class="entry-box loaded-entry"></div>
 
-  <h3>Load Entry</h3>
-  <input type="date" id="datePicker" class="date-picker" />
-  <button id="loadBtn" class="btn">Load</button>
-  <div id="loadedEntry" class="entry-box loaded-entry"></div>
-  <button id="btnSignOut" class="btn" style="margin-top:15px; display:none;">Log Out</button>
-</div>
+    <button id="btnSignOut" class="btn" style="margin-top:15px; display:none;">Log Out</button>
+  </div>
 
-<p id="statusMessage" style="text-align:center; margin-top:20px; font-weight:bold;"></p>
+  <!-- Status Message -->
+  <p id="statusMessage" style="text-align:center; margin-top:20px; font-weight:bold;"></p>
 
-  <!-- Footer with links to Privacy Policy and Terms of Service -->
-  <footer style="text-align:center; margin-top:40px; padding:20px 0; font-size:14px; color:#555;">
+  <!-- Footer -->
+  <footer style="text-align:center; margin-top:40px; padding:20px 0; font-size:14px; color:#aaa;">
     <a href="privacy.html" target="_blank" rel="noopener noreferrer" style="margin-right: 15px;">Privacy Policy</a>
     <a href="term.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
   </footer>
