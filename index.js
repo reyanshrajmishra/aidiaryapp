@@ -133,7 +133,7 @@ async function generateDiaryEntry(text) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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'
+        'Authorization': 'Bearer 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'
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",
