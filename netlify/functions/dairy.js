@@ -1,54 +1,37 @@
+// netlify/functions/diary.js
 export async function handler(event) {
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: 'Method Not Allowed'
-    };
-  }
-
   const { text, date } = JSON.parse(event.body || '{}');
 
-  if (!text || !date) {
+  const apiKey = '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'; // Replace with your actual key
+
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://aidiaryapp.netlify.app'
+    },
+    body: JSON.stringify({
+      model: 'mistralai/mixtral-8x7b',
+      messages: [
+        { role: 'system', content: 'You are an AI diary writer.' },
+        { role: 'user', content: `Write a diary entry based on this: "${text}" on ${date}` }
+      ]
+    })
+  });
+
+  if (!response.ok) {
     return {
-      statusCode: 400,
-      body: 'Missing text or date'
+      statusCode: response.status,
+      body: JSON.stringify({ error: 'API error occurred.' })
     };
   }
 
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer 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`
-      },
-      body: JSON.stringify({
-        model: "mistralai/mixtral-8x7b-instruct",
-        messages: [{
-          role: "user",
-          content: `Hey My Name Is Reyansh Raj Mishra and you are integrated in my app for helping me write diary entries. The date is ${date}. Today I: ${text}`
-        }]
-      })
-    });
+  const data = await response.json();
+  const entry = data.choices?.[0]?.message?.content || 'Entry could not be generated.';
 
-    if (!response.ok) {
-      return {
-        statusCode: response.status,
-        body: `OpenRouter error ${response.status}`
-      };
-    }
-
-    const data = await response.json();
-    const content = data.choices[0].message.content;
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ entry: content })
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      body: `Server error: ${err.message}`
-    };
-  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ entry })
+  };
 }
