@@ -136,7 +136,7 @@ async function generateDiaryEntry(text) {
         'Authorization': 'Bearer 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'
       },
       body: JSON.stringify({
-        model: "model: "openai/gpt-4o",
+        model: "model: "deepseek/deepseek-r1:free",
         messages: [{
           role: "user",
           content: `Hey My Name Is Reyansh Raj Mishra and you are integrated in my app for helping me write diary entrys. The date is ${todayDate}. Today I: ${text}`
