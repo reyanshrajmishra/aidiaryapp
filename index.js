@@ -10,6 +10,7 @@ const supabase = createClient(
 const authBox = document.getElementById('auth');
 const container = document.querySelector('.container');
 const statusMessage = document.getElementById('statusMessage');
+const toast = document.getElementById('toast');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const authForm = document.getElementById('authForm');
@@ -29,9 +30,18 @@ const loadedEntry = document.getElementById('loadedEntry');
 
 let authMode = 'signin';
 
+function showToast(message, isError = false) {
+  toast.textContent = message;
+  toast.className = 'toast show ' + (isError ? 'error' : 'success');
+  setTimeout(() => {
+    toast.className = 'toast';
+  }, 4000);
+}
+
 function showMessage(message, isError = false) {
   statusMessage.textContent = message;
   statusMessage.style.color = isError ? 'red' : 'green';
+  showToast(message, isError);
   setTimeout(() => {
     statusMessage.textContent = '';
   }, 6000);
@@ -70,8 +80,7 @@ authForm.addEventListener('submit', async (e) => {
   const password = passwordInput.value.trim();
 
   if (!email || !password) {
-    showMessage('Please enter both email and password.', true);
-    return;
+    return showMessage('Please enter both email and password.', true);
   }
 
   if (authMode === 'signin') {
@@ -128,7 +137,6 @@ async function generateDiaryEntry(text) {
     return 'Error generating entry. Please try again.';
   }
 }
-
 
 generateBtn.onclick = async () => {
   const text = inputText.value.trim();
