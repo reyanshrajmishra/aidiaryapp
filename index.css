@@ -1,6 +1,8 @@
+/* === Animated, Premium-Feel AI Diary CSS === */
+
 body {
-  background: #1a0a2a;               /* very dark purple */
-  color: #d8c7e8;                    /* light lavender text */
+  background: #1a0a2a;
+  color: #d8c7e8;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 20px;
@@ -8,10 +10,11 @@ body {
   justify-content: center;
   min-height: 100vh;
   box-sizing: border-box;
+  animation: fadeIn 1s ease-out;
 }
 
 .container {
-  background: linear-gradient(135deg, #2e1a47, #3b235c, #4a2a70); /* dark purple gradient */
+  background: linear-gradient(135deg, #2e1a47, #3b235c, #4a2a70);
   border: 2px solid;
   border-image-slice: 1;
   border-width: 2px;
@@ -20,41 +23,51 @@ body {
   padding: 25px 30px;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 8px 15px rgba(131,58,180,0.6); /* subtle purple glow */
+  box-shadow: 0 8px 15px rgba(131,58,180,0.6);
+  animation: slideUp 0.8s ease-out;
 }
 
 h2, h3 {
   font-weight: 600;
   margin-bottom: 12px;
-  color: #e3d7f7; /* pale lavender */
+  color: #e3d7f7;
 }
 
 .auth-box {
   margin-bottom: 30px;
   padding: 15px;
   border-radius: 12px;
-  background: #3c2f5a; /* dark muted purple */
-  border: 1.5px solid #7e57c2; /* medium purple */
+  background: #3c2f5a;
+  border: 1.5px solid #7e57c2;
   box-shadow: 0 3px 8px rgba(126,87,194,0.3);
+  animation: fadeIn 1s ease-out;
 }
 
-.input {
+.input, .date-picker {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
   font-size: 1rem;
   border: 1.5px solid #7e57c2;
   border-radius: 8px;
-  background: #2e2247; /* dark purple */
+  background: #2e2247;
   box-sizing: border-box;
   color: #d8c7e8;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.input:focus, .date-picker:focus {
+  outline: none;
+  border-color: #a15dbf;
+  background: #3b2d5b;
+  transform: scale(1.02);
 }
 
 .label {
   font-size: 0.95rem;
   margin-bottom: 6px;
   display: block;
-  color: #b8a3d1; /* muted lavender */
+  color: #b8a3d1;
 }
 
 textarea {
@@ -67,19 +80,20 @@ textarea {
   resize: vertical;
   font-size: 1rem;
   color: #d8c7e8;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.2s ease;
   box-sizing: border-box;
 }
 
 textarea:focus {
   outline: none;
-  border-color: #a15dbf; /* lighter purple */
+  border-color: #a15dbf;
   background: #3b2d5b;
+  transform: scale(1.02);
 }
 
 .btn {
-  background: linear-gradient(45deg, #6a1b9a, #b71c1c, #f57c00); /* darker, rich Instagram gradient */
-  color: #f5e9ff; /* pale text */
+  background: linear-gradient(45deg, #6a1b9a, #b71c1c, #f57c00);
+  color: #f5e9ff;
   border: none;
   padding: 11px 18px;
   border-radius: 8px;
@@ -87,12 +101,16 @@ textarea:focus {
   font-size: 1rem;
   margin-top: 10px;
   box-shadow: 0 3px 8px rgba(181,28,28,0.7);
-  transition: background 0.4s ease;
+  transition: all 0.3s ease;
+  transform: translateY(0);
   user-select: none;
+  display: inline-block !important;
 }
 
 .btn:hover {
   background: linear-gradient(45deg, #7a2fb3, #cc2525, #fb8c00);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
 .save-btn {
@@ -118,6 +136,7 @@ textarea:focus {
   line-height: 1.4;
   box-sizing: border-box;
   user-select: text;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .loaded-entry {
@@ -132,23 +151,45 @@ hr {
   border-top: 1.5px solid #6e4a9f;
 }
 
-.date-picker {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border-radius: 7px;
-  border: 1.5px solid #7e57c2;
-  background: #2e2247;
-  color: #d8c7e8;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
+/* ==== Animations ==== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.date-picker:focus {
-  outline: none;
-  border-color: #a15dbf;
-  background: #3b2d5b;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.btn {
-  display: inline-block !important;
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-6px); }
+  40%, 60% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+/* === Toast Notification === */
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #512da8;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: fadeIn 0.5s ease, slideUp 0.5s ease;
+  z-index: 1000;
 }
