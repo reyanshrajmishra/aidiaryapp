@@ -133,7 +133,7 @@ async function generateDiaryEntry(text) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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'
+        'Authorization': 'Bearer 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'
       },
       body: JSON.stringify({
         model: "nousresearch/nous-capybara-7b",
@@ -143,6 +143,17 @@ async function generateDiaryEntry(text) {
         }]
       })
     });
+
+    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error('Failed to generate entry:', error);
+    return 'Error generating entry. Please try again.';
+  }
+}
+
 
     if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
