@@ -1,8 +1,12 @@
 export default async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Only POST requests allowed' });
+  }
+
   const { text, date } = req.body;
 
-  if (!text) {
-    return res.status(400).json({ error: 'Missing input text' });
+  if (!text || !date) {
+    return res.status(400).json({ error: 'Missing input text or date' });
   }
 
   try {
@@ -10,14 +14,14 @@ export default async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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'
+        'Authorization': 'Bearer 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' // Keep this private
       },
       body: JSON.stringify({
         model: 'mistralai/mistral-7b-instruct',
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful AI diary assistant that writes thoughtful, emotional diary entries based on what the user did today.'
+            content: 'You are a helpful AI diary assistant that writes diary entries based on what the user did today.'
           },
           {
             role: 'user',
@@ -36,7 +40,7 @@ export default async (req, res) => {
     const entry = data.choices[0].message.content;
     return res.status(200).json({ entry });
   } catch (err) {
-    console.error('AI Error:', err);
+    console.error('OpenRouter error:', err);
     return res.status(500).json({ error: 'Internal error generating diary entry.' });
   }
 };
