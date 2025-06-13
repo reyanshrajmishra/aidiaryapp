@@ -14,7 +14,7 @@ export default async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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' // Keep this private
+        'Authorization': 'Bearer ${process.env.OPENROUTER_API_KEY}`' // Keep this private
       },
       body: JSON.stringify({
         model: 'mistralai/mistral-7b-instruct',
