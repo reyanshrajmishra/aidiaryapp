@@ -129,6 +129,7 @@ async function generateDiaryEntry(text) {
   }
 }
 
+
 generateBtn.onclick = async () => {
   const text = inputText.value.trim();
   if (!text) return showMessage('Please enter what happened today.', true);
