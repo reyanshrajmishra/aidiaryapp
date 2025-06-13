@@ -1,4 +1,33 @@
-/* === Animated, Premium-Feel AI Diary CSS === */
+/* index.css - AI Diary with full animations */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #7e57c2; }
+  50% { box-shadow: 0 0 15px #7e57c2; }
+  100% { box-shadow: 0 0 5px #7e57c2; }
+}
 
 body {
   background: #1a0a2a;
@@ -10,7 +39,7 @@ body {
   justify-content: center;
   min-height: 100vh;
   box-sizing: border-box;
-  animation: fadeIn 1s ease-out;
+  animation: fadeIn 1s ease;
 }
 
 .container {
@@ -24,13 +53,14 @@ body {
   max-width: 600px;
   width: 100%;
   box-shadow: 0 8px 15px rgba(131,58,180,0.6);
-  animation: slideUp 0.8s ease-out;
+  animation: slideUp 0.8s ease forwards;
 }
 
 h2, h3 {
   font-weight: 600;
   margin-bottom: 12px;
   color: #e3d7f7;
+  animation: fadeIn 0.8s ease;
 }
 
 .auth-box {
@@ -40,10 +70,10 @@ h2, h3 {
   background: #3c2f5a;
   border: 1.5px solid #7e57c2;
   box-shadow: 0 3px 8px rgba(126,87,194,0.3);
-  animation: fadeIn 1s ease-out;
+  animation: pulse 3s infinite ease-in-out;
 }
 
-.input, .date-picker {
+.input {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
@@ -53,14 +83,7 @@ h2, h3 {
   background: #2e2247;
   box-sizing: border-box;
   color: #d8c7e8;
-  transition: border-color 0.3s ease, transform 0.3s ease;
-}
-
-.input:focus, .date-picker:focus {
-  outline: none;
-  border-color: #a15dbf;
-  background: #3b2d5b;
-  transform: scale(1.02);
+  animation: fadeIn 1.2s ease;
 }
 
 .label {
@@ -80,15 +103,15 @@ textarea {
   resize: vertical;
   font-size: 1rem;
   color: #d8c7e8;
-  transition: border-color 0.3s ease, transform 0.2s ease;
+  transition: border-color 0.3s ease;
   box-sizing: border-box;
+  animation: fadeIn 1.2s ease;
 }
 
 textarea:focus {
   outline: none;
   border-color: #a15dbf;
   background: #3b2d5b;
-  transform: scale(1.02);
 }
 
 .btn {
@@ -101,16 +124,14 @@ textarea:focus {
   font-size: 1rem;
   margin-top: 10px;
   box-shadow: 0 3px 8px rgba(181,28,28,0.7);
-  transition: all 0.3s ease;
-  transform: translateY(0);
+  transition: transform 0.3s ease, background 0.4s ease;
   user-select: none;
-  display: inline-block !important;
+  animation: slideUp 0.7s ease;
 }
 
 .btn:hover {
   background: linear-gradient(45deg, #7a2fb3, #cc2525, #fb8c00);
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  transform: scale(1.05);
 }
 
 .save-btn {
@@ -136,7 +157,7 @@ textarea:focus {
   line-height: 1.4;
   box-sizing: border-box;
   user-select: text;
-  animation: fadeIn 0.8s ease-out;
+  animation: fadeIn 1.3s ease;
 }
 
 .loaded-entry {
@@ -149,47 +170,66 @@ hr {
   margin: 25px 0;
   border: none;
   border-top: 1.5px solid #6e4a9f;
+  animation: fadeIn 1.4s ease;
 }
 
-/* ==== Animations ==== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.date-picker {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 7px;
+  border: 1.5px solid #7e57c2;
+  background: #2e2247;
+  color: #d8c7e8;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  animation: fadeIn 1.4s ease;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.date-picker:focus {
+  outline: none;
+  border-color: #a15dbf;
+  background: #3b2d5b;
 }
 
-@keyframes shake {
-  10%, 90% { transform: translateX(-2px); }
-  20%, 80% { transform: translateX(4px); }
-  30%, 50%, 70% { transform: translateX(-6px); }
-  40%, 60% { transform: translateX(6px); }
+.btn {
+  display: inline-block !important;
 }
 
-.shake {
-  animation: shake 0.4s;
-}
-
-/* === Toast Notification === */
 .toast {
   position: fixed;
   bottom: 25px;
   left: 50%;
   transform: translateX(-50%);
   background: #512da8;
-  color: white;
-  padding: 12px 18px;
+  color: #fff;
+  padding: 10px 20px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  animation: fadeIn 0.5s ease, slideUp 0.5s ease;
-  z-index: 1000;
+  animation: fadeIn 0.3s ease, slideUp 0.3s ease;
+  z-index: 999;
+}
+
+.glow-border {
+  animation: glow 2s infinite;
+}
+
+.confetti::after {
+  content: "🎉🎊✨";
+  position: absolute;
+  animation: pulse 1.5s infinite;
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+
+button:focus {
+  outline: none;
+  animation: glow 1s infinite;
+}
+
+.container:has(#generatedEntry:not(:empty))::after {
+  content: "✨";
+  animation: pulse 2s infinite;
+  display: block;
+  font-size: 2rem;
+  text-align: center;
 }
