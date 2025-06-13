@@ -20,7 +20,7 @@ export async function handler(event) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer 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`
+        'Authorization': `Bearer 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`
       },
       body: JSON.stringify({
         model: "mistralai/mixtral-8x7b-instruct",
