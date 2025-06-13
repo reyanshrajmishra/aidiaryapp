@@ -136,7 +136,7 @@ async function generateDiaryEntry(text) {
         'Authorization': 'Bearer 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'
       },
       body: JSON.stringify({
-        model: "model: "nousresearch/nous-capybara-7b",
+        model: "nousresearch/nous-capybara-7b",
         messages: [{
           role: "user",
           content: `Hey My Name Is Reyansh Raj Mishra and you are integrated in my app for helping me write diary entrys. The date is ${todayDate}. Today I: ${text}`
