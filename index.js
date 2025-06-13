@@ -125,7 +125,7 @@ async function generateDiaryEntry(text) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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'
+        'Authorization': 'Bearer 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'
       },
       body: JSON.stringify({
         model: "mistralai/mixtral-8x7b-instruct",
