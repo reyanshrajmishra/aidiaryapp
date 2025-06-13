@@ -1,8 +1,6 @@
-// index.js
-
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// Initialize Supabase - replace keys with yours
+// Initialize Supabase
 const supabase = createClient(
   'https://bylkeapkyephshxjhpst.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bGtlYXBreWVwaHNoeGpocHN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNjY1MzYsImV4cCI6MjA2NDk0MjUzNn0.wwQGKkPvkFho6fH2zNSCX4Hn5CbAXRDp_SMyDB6AgF4'
@@ -31,7 +29,7 @@ const generatedEntry = document.getElementById('generatedEntry');
 const datePicker = document.getElementById('datePicker');
 const loadedEntry = document.getElementById('loadedEntry');
 
-let authMode = 'signin'; // or 'signup'
+let authMode = 'signin';
 
 function showMessage(message, isError = false) {
   statusMessage.textContent = message;
@@ -43,21 +41,18 @@ function showMessage(message, isError = false) {
 
 function updateAuthStatus(email) {
   if (email) {
-    // User logged in
-    authBox.style.display = 'none';          // Hide auth box
-    container.style.display = 'block';       // Show diary container
-    btnSignOut.style.display = 'inline-block';  // Show logout button
+    authBox.style.display = 'none';
+    container.style.display = 'block';
+    btnSignOut.style.display = 'inline-block';
   } else {
-    // User not logged in
-    authBox.style.display = 'block';         // Show auth box
-    container.style.display = 'none';        // Hide diary container
-    btnSignOut.style.display = 'none';       // Hide logout button
+    authBox.style.display = 'block';
+    container.style.display = 'none';
+    btnSignOut.style.display = 'none';
   }
-  console.log('Auth Status Updated. Email:', email, 'Logout btn display:', btnSignOut.style.display);
+  console.log('Auth Status Updated. Email:', email);
 }
 
-
-// Switch between sign in and sign up UI
+// Switch UI modes
 function switchToSignUp() {
   authMode = 'signup';
   authSubmitBtn.textContent = 'Sign Up';
@@ -71,7 +66,7 @@ function switchToSignIn() {
   btnSwitchToSignIn.style.display = 'none';
 }
 
-// Auth form submit handler
+// Handle auth form submit
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = emailInput.value.trim();
@@ -85,7 +80,6 @@ authForm.addEventListener('submit', async (e) => {
   if (authMode === 'signin') {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return showMessage(error.message, true);
-    console.log('Signed in user:', data.user);
     updateAuthStatus(data.user.email);
     showMessage('Logged in successfully.');
   } else {
@@ -99,7 +93,6 @@ authForm.addEventListener('submit', async (e) => {
 btnGoogle.onclick = async () => {
   const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
   if (error) return showMessage(error.message, true);
-  // Redirect happens, no UI update here
 };
 
 // Sign out
@@ -109,14 +102,13 @@ btnSignOut.onclick = async () => {
   showMessage('Logged out successfully.');
 };
 
-// Switch buttons
+// Switch auth mode
 btnSwitchToSignUp.onclick = switchToSignUp;
 btnSwitchToSignIn.onclick = switchToSignIn;
 
-// On load, check session
+// Check session on load
 window.onload = async () => {
   const { data: { session } } = await supabase.auth.getSession();
-  console.log('Session on load:', session);
   if (session?.user) {
     updateAuthStatus(session.user.email);
   } else {
@@ -124,9 +116,9 @@ window.onload = async () => {
   }
 };
 
-// AI diary generation
+// Generate diary entry
 async function generateDiaryEntry(text) {
-  const todayDate = new Date().toLocaleDateString('en-CA'); // yyyy-mm-dd format
+  const todayDate = new Date().toLocaleDateString('en-CA');
 
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -145,31 +137,9 @@ async function generateDiaryEntry(text) {
     });
 
     if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
     const data = await response.json();
     return data.choices[0].message.content;
-  } catch (error) {
-    console.error('Failed to generate entry:', error);
-    return 'Error generating entry. Please try again.';
-  }
-}
 
-
-    if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
-    const data = await response.json();
-    return data.choices[0].message.content;
-  } catch (error) {
-    console.error('Failed to generate entry:', error);
-    return 'Error generating entry. Please try again.';
-  }
-}
-
-
-    if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
-    const data = await response.json();
-    return data.choices[0].message.content;
   } catch (error) {
     console.error('Failed to generate entry:', error);
     return 'Error generating entry. Please try again.';
@@ -184,7 +154,7 @@ generateBtn.onclick = async () => {
   generatedEntry.textContent = entry;
 };
 
-// Save diary entry (local + cloud if logged in)
+// Save diary entry
 saveBtn.onclick = async () => {
   const entry = generatedEntry.textContent.trim();
   if (!entry || entry === 'Generating...' || entry.startsWith('Error')) {
@@ -199,16 +169,14 @@ saveBtn.onclick = async () => {
   const { data: { user } } = await supabase.auth.getUser();
   if (user) {
     const { error } = await supabase.from('entries').upsert({ user_id: user.id, date: dateKey, entry });
-    if (error) {
-      return showMessage('Error saving entry to cloud: ' + error.message, true);
-    }
+    if (error) return showMessage('Error saving entry to cloud: ' + error.message, true);
     showMessage(`Entry saved for ${dateKey} (cloud + local)`);
   } else {
     showMessage(`Entry saved locally for ${dateKey} (not signed in)`);
   }
 };
 
-// Delete entry (local + cloud)
+// Delete entry
 deleteBtn.onclick = async () => {
   const dateKey = datePicker.value;
   if (!dateKey) return showMessage('Please select a date to delete.', true);
@@ -223,14 +191,11 @@ deleteBtn.onclick = async () => {
       .eq('user_id', user.id)
       .eq('date', dateKey);
 
-    if (error) {
-      return showMessage('Failed to delete entry from cloud: ' + error.message, true);
-    }
+    if (error) return showMessage('Failed to delete entry from cloud: ' + error.message, true);
   }
 
   generatedEntry.textContent = '';
   loadedEntry.textContent = '';
-
   showMessage(`Entry for ${dateKey} deleted.`);
 };
 
