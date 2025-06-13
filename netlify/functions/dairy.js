@@ -1,37 +1,42 @@
-// netlify/functions/diary.js
-export async function handler(event) {
-  const { text, date } = JSON.parse(event.body || '{}');
+export default async (req, res) => {
+  const { text, date } = req.body;
 
-  const apiKey = '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'; // Replace with your actual key
-
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://aidiaryapp.netlify.app'
-    },
-    body: JSON.stringify({
-      model: 'mistralai/mixtral-8x7b',
-      messages: [
-        { role: 'system', content: 'You are an AI diary writer.' },
-        { role: 'user', content: `Write a diary entry based on this: "${text}" on ${date}` }
-      ]
-    })
-  });
-
-  if (!response.ok) {
-    return {
-      statusCode: response.status,
-      body: JSON.stringify({ error: 'API error occurred.' })
-    };
+  if (!text) {
+    return res.status(400).json({ error: 'Missing input text' });
   }
 
-  const data = await response.json();
-  const entry = data.choices?.[0]?.message?.content || 'Entry could not be generated.';
+  try {
+    const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer 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'
+      },
+      body: JSON.stringify({
+        model: 'mistralai/mistral-7b-instruct',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful AI diary assistant that writes thoughtful, emotional diary entries based on what the user did today.'
+          },
+          {
+            role: 'user',
+            content: `Today is ${date}. Here's what happened: ${text}`
+          }
+        ]
+      })
+    });
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ entry })
-  };
-}
+    if (!openRouterRes.ok) {
+      const err = await openRouterRes.text();
+      return res.status(openRouterRes.status).json({ error: err });
+    }
+
+    const data = await openRouterRes.json();
+    const entry = data.choices[0].message.content;
+    return res.status(200).json({ entry });
+  } catch (err) {
+    console.error('AI Error:', err);
+    return res.status(500).json({ error: 'Internal error generating diary entry.' });
+  }
+};
