@@ -5,40 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Diary</title>
   <link rel="stylesheet" href="index.css" />
-
-  <!-- ✅ Google AdSense Script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3627684978883577"
-    crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3627684978883577" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="fade-in">
 
-<div id="auth" class="auth-box">
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Auth Box -->
+<div id="auth" class="auth-box glow-border slide-in-top">
   <h3>Welcome to AI Diary</h3>
   <form id="authForm">
-    <input id="email" type="email" placeholder="Email" required autocomplete="email" class="input" />
-    <input id="password" type="password" placeholder="Password" required autocomplete="current-password" class="input" />
-    <button type="submit" id="authSubmitBtn" class="btn">Sign In</button>
+    <input id="email" type="email" placeholder="Email" required autocomplete="email" class="input pulse" />
+    <input id="password" type="password" placeholder="Password" required autocomplete="current-password" class="input pulse" />
+    <button type="submit" id="authSubmitBtn" class="btn glow-border">Sign In</button>
   </form>
 
   <div style="margin-top:10px;">
-    <button id="btnSwitchToSignUp" class="btn">Switch to Sign Up</button>
-    <button id="btnSwitchToSignIn" class="btn" style="display:none;">Switch to Sign In</button>
+    <button id="btnSwitchToSignUp" class="btn shake-on-hover">Switch to Sign Up</button>
+    <button id="btnSwitchToSignIn" class="btn shake-on-hover" style="display:none;">Switch to Sign In</button>
   </div>
 
-  <button id="btnGoogle" class="btn" style="margin-top:15px;">Sign In with Google</button>
+  <button id="btnGoogle" class="btn glow-border pulse" style="margin-top:15px;">Sign In with Google</button>
 </div>
 
-<div class="container" style="display:none;">
-  <h2>AI Diary Entry</h2>
+<!-- Main Container -->
+<div class="container glow-border slide-in-bottom" style="display:none;">
+  <h2 class="slide-in-left">AI Diary Entry</h2>
 
   <label for="inputText" class="label">What happened today?</label>
-  <textarea id="inputText" placeholder="Type your daily summary here..."></textarea>
-  <button id="generateBtn" class="btn">Generate Diary Entry</button>
+  <textarea id="inputText" placeholder="Type your daily summary here..." class="pulse"></textarea>
+  <button id="generateBtn" class="btn glow-border">Generate Diary Entry</button>
 
-  <h3>AI Generated Entry</h3>
-  <div id="generatedEntry" class="entry-box" contenteditable="true"></div>
-  <button id="saveBtn" class="btn save-btn">Save Entry</button>
-  <button id="deleteBtn" class="btn delete-btn" style="background-color:#d9534f; color:white;">Delete Entry</button>
+  <h3 class="slide-in-right">AI Generated Entry</h3>
+  <div id="generatedEntry" class="entry-box confetti" contenteditable="true"></div>
+  <button id="saveBtn" class="btn save-btn pulse">Save Entry</button>
+  <button id="deleteBtn" class="btn delete-btn shake-on-hover">Delete Entry</button>
 
   <hr />
 
@@ -46,12 +48,15 @@
   <input type="date" id="datePicker" class="date-picker" />
   <button id="loadBtn" class="btn">Load</button>
   <div id="loadedEntry" class="entry-box loaded-entry"></div>
+
   <button id="btnSignOut" class="btn" style="margin-top:15px; display:none;">Log Out</button>
 </div>
 
+<!-- Status Message -->
 <p id="statusMessage" style="text-align:center; margin-top:20px; font-weight:bold;"></p>
 
-<footer style="text-align:center; margin-top:40px; padding:20px 0; font-size:14px; color:#555;">
+<!-- Footer -->
+<footer style="text-align:center; margin-top:40px; padding:20px 0; font-size:14px; color:#aaa;">
   <a href="privacy.html" target="_blank" rel="noopener noreferrer" style="margin-right: 15px;">Privacy Policy</a>
   <a href="term.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
 </footer>
