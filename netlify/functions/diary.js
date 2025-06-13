@@ -1,20 +1,26 @@
-export default async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Only POST requests allowed' });
-  }
-
-  const { text, date } = req.body;
-
-  if (!text || !date) {
-    return res.status(400).json({ error: 'Missing input text or date' });
+export const handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: 'Only POST requests allowed' }),
+    };
   }
 
   try {
+    const { text, date } = JSON.parse(event.body);
+
+    if (!text || !date) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Missing input text or date' }),
+      };
+    }
+
     const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${process.env.OPENROUTER_API_KEY}`' // Keep this private
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`  // correct variable usage
       },
       body: JSON.stringify({
         model: 'mistralai/mistral-7b-instruct',
@@ -33,14 +39,24 @@ export default async (req, res) => {
 
     if (!openRouterRes.ok) {
       const err = await openRouterRes.text();
-      return res.status(openRouterRes.status).json({ error: err });
+      return {
+        statusCode: openRouterRes.status,
+        body: JSON.stringify({ error: err }),
+      };
     }
 
     const data = await openRouterRes.json();
     const entry = data.choices[0].message.content;
-    return res.status(200).json({ entry });
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ entry }),
+    };
   } catch (err) {
     console.error('OpenRouter error:', err);
-    return res.status(500).json({ error: 'Internal error generating diary entry.' });
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Internal error generating diary entry.' }),
+    };
   }
 };
