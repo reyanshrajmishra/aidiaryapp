@@ -136,13 +136,24 @@ async function generateDiaryEntry(text) {
         'Authorization': 'Bearer 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'
       },
       body: JSON.stringify({
-        model: "nousresearch/nous-capybara-7b",
+        model: "mistralai/mixtral-8x7b-instruct",
         messages: [{
           role: "user",
-          content: `Hey My Name Is Reyansh Raj Mishra and you are integrated in my app for helping me write diary entrys. The date is ${todayDate}. Today I: ${text}`
+          content: `Hey My Name Is Reyansh Raj Mishra and you are integrated in my app for helping me write diary entries. The date is ${todayDate}. Today I: ${text}`
         }]
       })
     });
+
+    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error('Failed to generate entry:', error);
+    return 'Error generating entry. Please try again.';
+  }
+}
+
 
     if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
