@@ -15,3 +15,5 @@
   functions = "netlify/functions"
   publish = "."
 
+[functions."ping"]
+  schedule = "@daily"
