@@ -1,9 +1,9 @@
-export default async () => {
+exports.handler = async function (event, context) {
   try {
     const url = 'https://bylkeapkyephshxjhpst.supabase.co/rest/v1/?select=1';
     const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bGtlYXBreWVwaHNoeGpocHN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzNjY1MzYsImV4cCI6MjA2NDk0MjUzNn0.wwQGKkPvkFho6fH2zNSCX4Hn5CbAXRDp_SMyDB6AgF4';
 
-    const res = await fetch(url, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'apikey': apiKey,
@@ -11,17 +11,16 @@ export default async () => {
       }
     });
 
-    const text = await res.text();
+    const data = await response.text();
 
-    return new Response(`✅ Ping Success\nStatus: ${res.status}\n\nBody:\n${text}`, {
-      status: 200,
-      headers: { 'Content-Type': 'text/plain' }
-    });
-
-  } catch (err) {
-    return new Response(`❌ CRASH\n${err.stack || err.message || err.toString()}`, {
-      status: 500,
-      headers: { 'Content-Type': 'text/plain' }
-    });
+    return {
+      statusCode: 200,
+      body: `✅ Supabase Ping Success\nStatus: ${response.status}\n\n${data}`
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: `❌ CRASH\n${error.stack || error.message || 'Unknown error'}`
+    };
   }
 };
