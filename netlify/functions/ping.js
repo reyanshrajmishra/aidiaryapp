@@ -1,3 +1,5 @@
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
 exports.handler = async function (event, context) {
   try {
     const url = 'https://bylkeapkyephshxjhpst.supabase.co/rest/v1/?select=1';
@@ -20,7 +22,7 @@ exports.handler = async function (event, context) {
   } catch (error) {
     return {
       statusCode: 500,
-      body: `❌ CRASH\n${error.stack || error.message || 'Unknown error'}`
+      body: `❌ CRASH\n${error.stack || error.message}`
     };
   }
 };
