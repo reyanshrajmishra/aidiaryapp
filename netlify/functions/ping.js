@@ -1,28 +1,24 @@
 import fetch from 'node-fetch';
 import 'dotenv/config';
 
-export default async (req) => {
+export default async () => {
   try {
-    const url = 'https://bylkeapkyephshxjhpst.supabase.co/rest/v1/?select=1';
-    const apiKey = process.env.SUPABASE_KEY;
-
-    const res = await fetch(url, {
+    const res = await fetch('https://bylkeapkyephshxjhpst.supabase.co/rest/v1/?select=1', {
       headers: {
-        'apikey': apiKey,
-        'Authorization': `Bearer ${apiKey}`
+        apikey: process.env.SUPABASE_KEY,
+        Authorization: `Bearer ${process.env.SUPABASE_KEY}`
       }
     });
 
-    const text = await res.text();
-
+    const json = await res.json();
     return {
       statusCode: 200,
-      body: `✅ Supabase response:\n${text}`
+      body: JSON.stringify(json)
     };
   } catch (err) {
     return {
       statusCode: 500,
-      body: `❌ Error: ${err.message || err}`
+      body: `error: ${err.message}`
     };
   }
 };
